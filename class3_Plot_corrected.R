@@ -179,6 +179,8 @@ df_pivot <- summarize(group_by(df,month),rain=sum(rain))
 slices <- df_pivot[["rain"]] 
 pie(slices, labels=df1[["month"]], main="Pie Chart of rain")
 
+
+
 # Pie Chart of area, wind, rain, temp by day
 
 df_pivot <- summarize(group_by(df1,day),area=sum(area))
@@ -207,8 +209,11 @@ colnames(routes) <- c("airline", "airlineID", "sourceAirport", "sourceAirportID"
 
 ##attach(routes)
 ##attach(airports)
+
+install.packages("plyr")
 map <- get_map(location = 'World', zoom = 4)
 airportA <- merge(airports, routes, by.x = "ID", by.y = "sourceAirportID")
+
 mapPoints <- ggmap(map) +
   geom_point(aes(x = lon, y = lat, size = sqrt(sourceAirportID)), data = airportA, alpha = .5)
 mapPoints
@@ -217,6 +222,12 @@ mapPoints
 # Map Plot of destinationAirportID
 
 
+install.packages("ggmap")
+library(ggmap)
 mapPoints <- ggmap(map) +
   geom_point(aes(x = lon, y = lat, size = sqrt(destinationAirportID)), data = airportB, alpha = .5)
 mapPoints
+
+mapPoints 
+dev.print(pdf, 'Map.pdf') 
+
