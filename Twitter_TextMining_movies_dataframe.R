@@ -20,7 +20,7 @@ library(plyr)
 library(twitteR)
 library(tm)
 
-set.seed(150)
+set.seed(200)
 
 #Twitter session information
 
@@ -29,7 +29,7 @@ api_secret = "BQPgWZ9N4kqd8jw5yiISMLdoiC3R1N6cbJKuzY9TGzj5Xky2H5"
 access_token = "313785357-p1W0CK6t6QME2xGuEqaMHoDSdFa3T0hhibp4CEwK"
 access_token_secret = "soubgsFkAwbmlGDrsbwgVSKKopex12aTObFdT4VtkPiVf"
 
-
+devtools::install_github("jrowen/twitteR", ref = "oauth_httr_1_0",version="0.6.1")
 
 #Twitter authentication
 setup_twitter_oauth(api_key,api_secret,access_token,access_token_secret)
@@ -43,6 +43,24 @@ n_hashtags <- paste(hashtags, sep ="OR")
 tweet=searchTwitter(n_hashtags,n=1000,lang ="en")
 df = do.call("rbind", lapply(tweet, as.data.frame))
 
+tweet1=searchTwitter("#dear zindagi",n=1000,lang ="en")
+tweet2=searchTwitter("#force2",n=1000,lang ="en")
+tweet3=searchTwitter("#doctor strange",n=1000,lang ="en")
+tweet4=searchTwitter("#inferno",n=1000,lang ="en")
+tweet5=searchTwitter("#suicide squad",n=1000,lang ="en")
+
+#converting into dataframe 
+df1 = do.call("rbind", lapply(tweet1, as.data.frame))
+df2=  do.call("rbind", lapply(tweet2, as.data.frame))
+df3 = do.call("rbind", lapply(tweet3, as.data.frame))
+df4 = do.call("rbind", lapply(tweet4, as.data.frame))
+df5 = do.call("rbind", lapply(tweet5, as.data.frame))
+
+#merging dataframe
+df6=merge(df1,df2,all = TRUE)
+df7=merge(df6,df3,all=TRUE)
+df8=merge(df7,df4,all=TRUE)
+df=merge(df8,df5,all=TRUE)
 
 head(df)
 text = df$text
@@ -59,13 +77,13 @@ corpus = tm_map(corpus,content_transformer(tolower))
 
 
 dtm = DocumentTermMatrix(corpus)
-dtm_matrix = as.matrix(dtm)
+dtm2 = as.matrix(dtm)
 
 
 ##?DocumentTermMatrix()
 
-frequency =colSums(dtm_matrix)
-frequency = sort(frequency,decreasing= TRUE)
+frequency =colSums(dtm2)
+frequency = sort(frequency,decreasing=TRUE)
 head(frequency,n=200)
 
 
